@@ -1,0 +1,15 @@
+[root@liudehua test1]# cat file1
+0011AAA 200.00 20050321  
+0012BBB 300.00 20050621  
+0013DDD 400.00 20050622  
+0014FFF 500.00 20050401 
+[root@liudehua test1]# cat file2
+I0011  11111  
+I0012  22222  
+I0014  55555  
+I0013  66666  
+[root@liudehua test1]# awk  'NR==FNR{a[substr($1,2,5)]=$2}NR>FNR&&a[b=substr($1,1,4)]{print $0, a[b]}' file2 file1
+0011AAA 200.00 20050321   11111
+0012BBB 300.00 20050621   22222
+0013DDD 400.00 20050622   66666
+0014FFF 500.00 20050401  55555

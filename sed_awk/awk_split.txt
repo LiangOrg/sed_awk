@@ -1,0 +1,24 @@
+[root@liudehua ~]# cat aa.txt
+`/mnt/WinInfo/WinInfo/192.168.12.5/IpList.txt' ->
+`/mnt/WinInfo/WinInfo/192.168.12.5/Net.txt' ->
+`/mnt/WinInfo/WinInfo/192.168.12.5/Route.txt' ->
+`/mnt/WinInfo/WinInfo/192.168.12.4/IpList.txt' ->
+`/mnt/WinInfo/WinInfo/192.168.12.4/Net.txt' ->
+`/mnt/WinInfo/WinInfo/192.168.12.4/Route.txt' ->
+
+[root@liudehua ~]# awk -F/ '{split($6,b,"'\''");a[$5]=a[$5]"\t"b[1]}END{for(i in a)print i"\n"a[i]}' aa.txt
+
+	
+192.168.12.4
+	IpList.txt	Net.txt	Route.txt
+192.168.12.5
+	IpList.txt	Net.txt	Route.txt
+
+
+#awk -F/ '{split($6,b,"'\''");a[$5]=a[$5]"\t"b[1]}END{for(i in a)print i"\n"a[i]}' aa.txt
+
+#cat aa.txt|grep -Po "(\d+\.){3}\d+/[^']+"|awk -F/ '{a[$1]=a[$1] OFS  $2 }END{for (i in a) print i,ORS,a[i]}'
+192.168.12.4 
+  IpList.txt Net.txt Route.txt
+192.168.12.5 
+  IpList.txt Net.txt Route.txt
