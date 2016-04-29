@@ -16,7 +16,7 @@ PID                 USER            ELAPSED
 
 ELAPSED 其格式为 [[dd-]hh:]mm:ss。
 
-我现在 想 把 上面 第3列的输出 单位 改为 秒，输出如下，该如何实现呢？？
+我现在 想 把 上面 第3列的输出 单位 改为 秒，输出如下，该如何实现呢
 PID                 USER            ELAPSED
 42                  asp               2726
 21                  asp               23               
