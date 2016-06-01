@@ -55,3 +55,6 @@ d
 [root@localhost test]# sed ':a;N;/ms$/s/\n/ /g;ta;P;D' 1.txt
 114.113.144.2: 19ms 19ms 19ms 36ms 22ms 19ms 18ms
 218.61.204.73: 0ms 0ms 0ms 0ms 0ms 0ms 0ms
+
+
+

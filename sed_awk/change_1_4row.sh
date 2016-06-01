@@ -58,7 +58,7 @@ seq 10|sed -r '1{h;d};:a;H;4bb;d;ba;:b;g;s/^([^\n]+)(.*\n)([^\n]+$)/\3\2\1/;:c;n
 
 #将第5行内容和第15行内容互换
 
-[root@local_game_server2 test]# seq 20|sed -r '5{h;d};6,14{H;d};15{H;g;s#^([^\n]+)(.*\n)([^\n]+)$#\3\2\1#g}'
+[root@localhost]# seq 20|sed -r '5{h;d};6,14{H;d};15{H;g;s#^([^\n]+)(.*\n)([^\n]+)$#\3\2\1#g}'
 1
 2
 3
