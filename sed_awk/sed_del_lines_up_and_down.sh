@@ -78,3 +78,5 @@ kklll
 
 
 awk '{a[NR]=$0;if(/xxoo/)b=NR}END{print "#"a[b-2],"#"a[b-1],"#"a[b],"#"a[b+1],"#"a[b+2]}' OFS="\n" file
+
+awk '{a[NR]=$0;/xxoo/?s=NR:""}END{for(i=0;i++<NR;)print (i>s-3&&i<s+3)?"#"a[i]:a[i]}' file
