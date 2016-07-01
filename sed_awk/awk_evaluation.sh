@@ -1,9 +1,26 @@
+#最大值，最小值，平均值
+
+
+1.打印1.txt中每一行的最大值
+
+#awk '{split($0,a);len=asort(a,b);print b[len]}'  1.txt
+
+[root@local_game_server2 test]# cat 1.txt
+1458219960     1371608893
+1426597560     1371526093
+1451610435    1451610435  1456794435  1464779235
+[root@local_game_server2 test]# awk '{split($0,a);len=asort(a,b);print b[len]}' 1.txt
+1458219960
+1426597560
+1464779235
+
+
+
+
+
+2.打印最大值最小值
+
 #echo 7 8 9 2 1 | awk '{max=$1;min=$1;for (i=1;i<=NF;i++) {if(max<$i) max=$i;if(min>$i) min=$i;sum+=$i};} END {print max,min,sum}'
-
-
-
-
-
 
 #echo 7 8 9 2 1  | awk '{ sum=0; for(i=0;i++<NF;){a[i]=$i ; sum+=$i }; max=asort(a,b);print b[max],b[1],sum }'
 9 1 27
@@ -70,7 +87,7 @@ xxoo 39.75
 -1014534.29 11315985.23
 -1013399.39 11319091.15
 0.23          -100
-[root@local_game_server2 test]# awk 'NR==1{max1=min1=$1;max2=min2=$2}$1>max1{max1=$1}$2>max2{max2=$2}$1<min1{min1=$1}$2<min2{min2=$2}END{print max1,min1,max2,min2}' max.test 
+[root@localhost test]# awk 'NR==1{max1=min1=$1;max2=min2=$2}$1>max1{max1=$1}$2>max2{max2=$2}$1<min1{min1=$1}$2<min2{min2=$2}END{print max1,min1,max2,min2}' max.test 
 0.23 -1014534.29 11319091.15 -100
 
 ######
@@ -85,7 +102,7 @@ cat ufile
 -1 2  3  4  5  6  8 9
 0  0 -1 -2 -33
 4
-[root@local_game_server2 test]# awk 'NF>n{n=NF}{for(i=0;i++<NF;){cont[i]++;if(min[i]=="")min[i]=$i;if(max[i]=="")max[i]=$i;if($i<min[i])min[i]=$i;if($i>max[i])max[i]=$i;sum[i]+=$i}}END{for(i=0;i++<n;)print min[i],max[i],sum[i],sum[i]/cont[i]}' ufile|column -t
+[root@localhost test]# awk 'NF>n{n=NF}{for(i=0;i++<NF;){cont[i]++;if(min[i]=="")min[i]=$i;if(max[i]=="")max[i]=$i;if($i<min[i])min[i]=$i;if($i>max[i])max[i]=$i;sum[i]+=$i}}END{for(i=0;i++<n;)print min[i],max[i],sum[i],sum[i]/cont[i]}' ufile|column -t
 -1   7  15   2.5
 0    8  17   3.4
 -1   9  14   3.5
@@ -114,6 +131,34 @@ END{
             sum[i],                #打印和
             sum[i]/cont[i]         #打印平均值
 }' urfile
+
+##############################################
+4.需求：将file变成file1
+输出规则：
+每单独一行的时间字段进行比较，如果时间大，则返回第一个字段加时间字段前一列的460开头的数据；（每行时间列数多少不固定）
+[root@local_game_server2 test]# cat file
+8613380308589|460110410761112|2016-03-17 21:06:00|460110418680672|2013-06-19 10:28:13
+8613380343213|460110410353535|2015-03-17 21:06:00|460110446352525|2013-06-18 11:28:13
+8617722833295|460110418713828|2016-01-01 09:07:15|460110418713826|2016-01-01 09:07:15|460110418713821|2016-03-01 09:07:15|4601104184242424|2016-06-01 19:07:15
+##############################################
+#cat file1
+8613380308589|460110410761112|2016-03-17 21:06:00
+8613380343213|460110410353535|2015-03-17 21:06:00
+8617722833295|4601104184242424|2016-06-01 19:07:15
+
+
+
+#代码：
+
+
+
+awk --re-interval '{for(i=1;i<=NF;i++){if(match($i,"([0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2})",a)){a[1]=gensub(":|-"," ","g",a[1]);m=mktime(a[1])};if(m>max){max=m;str=$(i-1)}};print $1,str,strftime("%F %T",max);max=""}' FS="|" OFS="|"  file
+
+awk  '{max=0;for(i=3;i<=NF;i+=2){$i=gensub(":|-"," ","g",$i);m=mktime($i);if(m>max){max=m;str=$(i-1)}};print $1,str,strftime("%F %T",max)}' FS="|" OFS="|"  file
+
+
+
+
 
 
 
