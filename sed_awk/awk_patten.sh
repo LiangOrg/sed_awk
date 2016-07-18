@@ -100,7 +100,7 @@ awk '/xx/{a++}a==3;/oo/&&a==3{exit}' 1.txt.new
 awk -vm=3 -vn=2 '/xx/{a++;i=NR}/oo/{b++;j=NR}{if(a==m)f=1;if(f&&i<=NR)c=c?c"\n"$0:$0;if(b==n&&i<=j){print c;exit}}' 1.txt.new
 
 
-
+sed -r '/^xx$/{x;s/^/./;/.{3}/{x;:a;N;/\noo$/!ba;q};x};d' 1.txt.new
 
 
 
