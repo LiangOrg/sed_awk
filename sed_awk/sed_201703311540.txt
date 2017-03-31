@@ -1,0 +1,50 @@
+#!/bin/bash
+#############################################
+需求:删掉文本ufile中倒数第二行的末尾的逗号（逗号后边可能有空白字符,一起删掉.）
+#############################################
+[root@braindeath2 tmp]# cat ufile 
+{
+"direct" : "1",
+"group_reporting" : "",
+"iodepth" : "128",
+"ioengine" : "libaio",
+"norandommap" : "",
+"numjobs" : "4",
+"randrepeat" : "0",
+"runtime" : "100",
+"time_based" : "",
+"time_based" : "",
+"timeout" : "8800",   
+}
+#############################################
+代码1：
+[root@braindeath2 tmp]# sed '$!N;s/,\s*\n}/\n}/;P;D' ufile  (两行两行依次进行匹配，当前行不符合就换下一行进行匹配，最后匹配到的就进行替换.)       详情请看P;D的用法
+{
+"direct" : "1",
+"group_reporting" : "",
+"iodepth" : "128",
+"ioengine" : "libaio",
+"norandommap" : "",
+"numjobs" : "4",
+"randrepeat" : "0",
+"runtime" : "100",
+"time_based" : "",
+"time_based" : "",
+"timeout" : "8800"
+}
+#############################################
+代码2:
+[root@braindeath2 tmp]# sed -n '1h;1!H;${x;s#,\s*\n}#\n}#gp}' ufile   (先把整个文本放到，保持空间里，然后再替换到模式空间里，最后再进行匹配替换.) 如果是高版本的sed 支持-z参数的话，就没有这么麻烦.
+{
+"direct" : "1",
+"group_reporting" : "",
+"iodepth" : "128",
+"ioengine" : "libaio",
+"norandommap" : "",
+"numjobs" : "4",
+"randrepeat" : "0",
+"runtime" : "100",
+"time_based" : "",
+"time_based" : "",
+"timeout" : "8800"
+}
