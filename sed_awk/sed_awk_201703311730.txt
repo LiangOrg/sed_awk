@@ -1,0 +1,48 @@
+#/bin/bash
+#需求：打印关键字"rent_content_id" 所在的整个段落(<AUDIT_RECORD开头,\>结尾,中间包含rent_content_id)
+##########################################################
+[root@braindeath2 tmp]# cat file 
+<AUDIT_RECORD
+  IP="10.1.11.80"
+/>
+#####################
+<AUDIT_RECORD
+x
+x
+xkkx
+  SQLTEXT="select * from rent_sku where  rent_content_id= '206071' and rent_type_id= 7 and status =1"
+oooooooooooooooooooooooooooooo
+llppp
+o
+/>
+xxxoo
+xx;;;
+<AUDIT_RECORD
+  NAME="Query"
+  IP="10.1.11.70"  
+s';'s;';'
+/>
+/>
+############################################################
+想要的结果：
+<AUDIT_RECORD
+x
+x
+xkkx
+  SQLTEXT="select * from rent_sku where  rent_content_id= '206071' and rent_type_id= 7 and status =1"
+oooooooooooooooooooooooooooooo
+llppp
+o
+/>
+##########################################################
+#代码：
+grep -Poz  '<AUDIT_RECORD.*([^\n/]*\n)+.*rent_content_id.*([^\n/]*\n)+/>'  file
+
+
+sed -n '/<AUDIT_RECORD/{:a;N;/\/>/!ba;/rent_content_id/p}' file
+
+awk '{p=p RS $0}/<AUDIT_RECORD/{p=$0}/\/>/&&p~/rent_content_id/{print p}' file
+
+awk -vRS="<AUDIT_RECORD" '/rent_content_id/&&$0=gensub(/\/>.*/,"/>",1,RS$0)' file
+##########################################################
+
